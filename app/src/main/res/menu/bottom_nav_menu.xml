@@ -5,17 +5,13 @@
         android:icon="@drawable/ico_favoritos"
         android:title="Home" />
     <item
-        android:id="@+id/nav_cart"
-        android:icon="@drawable/ico_novos"
-        android:title="Carrinho" />
-    <item
         android:id="@+id/nav_list"
         android:icon="@drawable/ico_home"
-        android:title="Minha Lista" />
+        android:title="Agendamentos" />
     <item
         android:id="@+id/nav_search"
         android:icon="@drawable/ico_relatorios"
-        android:title="Procurar" />
+        android:title="Historico" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ico_perfil"
