@@ -12,4 +12,11 @@
     </style>
 
     <style name="Theme.Barbearia" parent="Base.Theme.Barbearia" />
+    <style name="Theme.ProjetoDaBarbearia" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Adicione estas linhas -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="27">shortEdges</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
 </resources>

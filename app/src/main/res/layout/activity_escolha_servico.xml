@@ -6,11 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#141414"
+    android:fitsSystemWindows="true"
     tools:context=".Activity.EscolhaServicoActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,13 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="16dp">
 
                 <ImageView
                     android:id="@+id/btn_VoltarServico"
@@ -118,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="8dp"
-                android:text="CLUBE DE CAVALHEIROS"
+                android:text="Barbeiro Tanjiro"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -229,19 +233,20 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_spinner_background"
-                android:popupBackground="#141414"
                 android:entries="@array/horarios_disponiveis"
+                android:popupBackground="#141414"
                 android:theme="@style/SpinnerTextStyle" />
 
-
-        <!-- Botão de confirmação -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/reservarButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_fundo_amarelo"
-            android:text="Reserve agora"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-    </LinearLayout>
-</ScrollView></androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Botão de confirmação -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/reservarButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/btn_fundo_amarelo"
+                android:text="Reserve agora"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "742577513337",
-    "project_id": "projeto-barbearia-309c2",
-    "storage_bucket": "projeto-barbearia-309c2.firebasestorage.app"
+    "project_number": "754718056120",
+    "project_id": "barbeariaapp-86abc",
+    "storage_bucket": "barbeariaapp-86abc.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:742577513337:android:49a1f279c96353b29f85a8",
+        "mobilesdk_app_id": "1:754718056120:android:017cefaa952aa1b7bf1e4d",
         "android_client_info": {
           "package_name": "com.projetos.barbearia"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyApNoJBDMCv7oxtsHND_5WZKPm_2muhbSw"
+          "current_key": "AIzaSyD0ZKkp60vX06lu-SHSHHF_N3RqDQ3tnFI"
         }
       ],
       "services": {

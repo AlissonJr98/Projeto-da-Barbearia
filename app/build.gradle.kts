@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -59,5 +61,9 @@ dependencies {
     // LiveData e ViewModel
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    dependencies {
+        implementation ("com.google.accompanist:accompanist-insets:0.30.1")
+        implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+    }
 
 }
