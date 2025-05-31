@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Barbearia"
         tools:targetApi="31">
+
+        <!-- Telas do app -->
         <activity
             android:name=".view.LoginActivity"
             android:exported="false" />
@@ -25,11 +27,15 @@
             android:name=".view.MainActivity"
             android:exported="false" />
         <activity
+            android:name=".view.MeusAgendamentosActivity"
+            android:exported="false" /> <!-- ✅ Adicionada aqui -->
+        <activity android:name=".view.PerfilActivity"
+            android:exported="false" />
+                <activity
             android:name=".view.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

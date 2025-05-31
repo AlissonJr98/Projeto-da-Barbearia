@@ -22,6 +22,11 @@ class SignUpActivity : AppCompatActivity() {
             finish() // Fecha a atividade atual e retorna à tela anterior
         }
 
+        binding.jaTemContaTextView.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish() // Finaliza a SignUpActivity para não voltar com o botão voltar
+        }
+
         // Inicializar o Firebase Auth
         auth = FirebaseAuth.getInstance() // Obtém a instância do Firebase Authentication <button class="citation-flag" data-index="3">
 

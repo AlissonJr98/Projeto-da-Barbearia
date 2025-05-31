@@ -1,27 +1,75 @@
-package com.projetos.barbearia.view // Pacote onde a classe está localizada
+package com.projetos.barbearia.view
 
-import android.content.Intent // Importa a classe Intent para navegar entre atividades <button class="citation-flag" data-index="1">
-import android.os.Bundle // Importa classes necessárias para gerenciar o ciclo de vida da atividade
-import androidx.appcompat.app.AppCompatActivity // Importa a classe base para atividades compatíveis com a biblioteca de suporte
-import com.projetos.barbearia.databinding.ActivityIntroBinding // Importa o binding gerado automaticamente para acessar elementos do layout
+import android.content.Intent
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.projetos.barbearia.databinding.ActivityIntroBinding
 
-// Classe que representa a tela inicial (intro) do aplicativo
 class IntroActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityIntroBinding // Binding para acessar os elementos do layout
+    private lateinit var binding: ActivityIntroBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityIntroBinding.inflate(layoutInflater) // Infla o layout usando View Binding
-        setContentView(binding.root) // Define o conteúdo da atividade como o layout inflado
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Configurar o botão "Entrar"
+        auth = FirebaseAuth.getInstance()
+
+        // Botão "Entrar"
         binding.btnEntrar.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java)) // Navega para a tela de login <button class="citation-flag" data-index="1">
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        // Configurar o botão "Inscrever-se"
+        // Botão "Inscrever-se"
         binding.btnIncrever.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java)) // Navega para a tela de inscrição <button class="citation-flag" data-index="1">
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
+
+        // Texto "Esqueceu sua senha?"
+        binding.textView.setOnClickListener {
+            showResetPasswordDialog()
+        }
+    }
+
+    private fun showResetPasswordDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Redefinir senha")
+
+        val input = EditText(this)
+        input.hint = "Digite seu e-mail"
+        input.inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        builder.setView(input)
+
+        builder.setPositiveButton("Enviar") { dialog, _ ->
+            val email = input.text.toString().trim()
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Por favor, insira seu e-mail", Toast.LENGTH_SHORT).show()
+            } else {
+                sendPasswordResetEmail(email)
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Email para redefinição enviado!", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Falha ao enviar email: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
     }
 }

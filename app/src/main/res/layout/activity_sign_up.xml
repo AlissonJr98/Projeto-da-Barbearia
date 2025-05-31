@@ -145,6 +145,8 @@
         android:text="Já tem uma conta? Entre agora!"
         android:textColor="#FFD60A"
         android:textSize="14sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="@+id/btn_increver"
         app:layout_constraintStart_toStartOf="@+id/btn_increver"
         app:layout_constraintTop_toBottomOf="@+id/btn_increver" />
