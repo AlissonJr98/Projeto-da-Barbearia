@@ -9,10 +9,10 @@ class EscolhaServicoRepository {
     fun getBarberItems(): List<BarberItem> {
         return listOf(
             // Cada item representa uma barbearia ou serviço com título, subtítulo, horário e imagem
-            BarberItem("CLUBE DE CAVALHEIROS", "Horário disponível", "10am - 10pm", R.drawable.img_02), // Primeiro item da lista
-            BarberItem("CLUBE DE CAVALHEIROS", "Horário disponível", "10am - 10pm", R.drawable.img_03), // Segundo item da lista
-            BarberItem("CLUBE DE CAVALHEIROS", "Horário disponível", "10am - 10pm", R.drawable.img_02), // Terceiro item da lista
-            BarberItem("CLUBE DE CAVALHEIROS", "Horário disponível", "10am - 10pm", R.drawable.img_03)  // Quarto item da lista
+            BarberItem("", "Horário disponível", "10am - 10pm", R.drawable.img_02), // Primeiro item da lista
+            BarberItem("", "Horário disponível", "10am - 10pm", R.drawable.img_03), // Segundo item da lista
+            BarberItem("", "Horário disponível", "10am - 10pm", R.drawable.img_02), // Terceiro item da lista
+            BarberItem("", "Horário disponível", "10am - 10pm", R.drawable.img_03)  // Quarto item da lista
         ) // Retorna uma lista imutável de objetos BarberItem <button class="citation-flag" data-index="1">
     }
 }

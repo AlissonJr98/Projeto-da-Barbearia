@@ -28,7 +28,7 @@ class EscolhaServicoActivity : AppCompatActivity() {
             // Atualizar a UI com os dados observados
             if (items.isNotEmpty()) {
                 val barberItem = items[0] // Obtém o primeiro item da lista
-                binding.titleTextView.text = "Bem-vindo ao ${barberItem.title}" // Atualiza o título com o nome da barbearia
+                binding.titleTextView.text = "Bem-vindo a Barbearia Inosuke ${barberItem.title}" // Atualiza o título com o nome da barbearia
                 binding.clubeTextView.text = barberItem.title // Atualiza o nome do clube
                 binding.descricaoTextView.text = barberItem.subtitle // Atualiza a descrição
                 binding.abertoTextView.text = barberItem.horario // Atualiza o horário de funcionamento
