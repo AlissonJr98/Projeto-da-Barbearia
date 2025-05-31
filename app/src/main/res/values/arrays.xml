@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="horarios_disponiveis">
+        <item>10:00 AM</item>
+        <item>11:00 AM</item>
+        <item>12:00 PM</item>
+        <item>01:00 PM</item>
+        <item>02:00 PM</item>
+        <item>03:00 PM</item>
+        <item>04:00 PM</item>
+    </string-array>
+</resources>
