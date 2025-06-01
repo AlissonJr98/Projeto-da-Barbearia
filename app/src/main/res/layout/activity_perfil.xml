@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="#141414">
 
+
+
     <ImageView
         android:id="@+id/profileImage"
         android:layout_width="120dp"
@@ -35,12 +37,37 @@
         android:layout_marginTop="4dp"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:id="@+id/profileAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Endereço não definido"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/profilePhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Telefone não definido"
+        android:textColor="@color/white"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal" />
+
     <Button
         android:id="@+id/btnEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Editar Perfil"
         android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/btnEditEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Editar Email"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:layout_width="wrap_content"

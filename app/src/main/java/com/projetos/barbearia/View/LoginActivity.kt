@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.projetos.barbearia.R
 import com.projetos.barbearia.databinding.ActivityLoginBinding
-import kotlin.jvm.java
 
 class LoginActivity : AppCompatActivity() {
 
@@ -29,16 +28,23 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        auth = FirebaseAuth.getInstance()
+
+        // Se usuário já está logado, abre MainActivity direto e finaliza LoginActivity
+        if (auth.currentUser != null) {
+            openMainActivity()
+            finish()
+            return
+        }
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.naoTemContaTextView.setOnClickListener {
             val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
             startActivity(intent)
-            finish() // opcional, se quiser fechar a tela de login ao abrir o cadastro
+            finish() // opcional, fecha tela de login ao abrir cadastro
         }
-
-        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))

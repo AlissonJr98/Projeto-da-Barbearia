@@ -1,8 +1,8 @@
 package com.projetos.barbearia.Activity
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +25,15 @@ class EscolhaServicoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEscolhaServicoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Configura o spinner de barbeiros
+        val barbeiroAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.barbeiros_array,
+            android.R.layout.simple_spinner_item
+        )
+        barbeiroAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.barbeiroSpinner.adapter = barbeiroAdapter
 
         binding.btnVoltarServico.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -69,20 +78,24 @@ class EscolhaServicoActivity : AppCompatActivity() {
             }
             val selectedTime = binding.horarioSpinner.selectedItem.toString()
             val selectedDate = binding.horarioTextView.text.toString()
+            val selectedBarber = binding.barbeiroSpinner.selectedItem.toString()
 
             if (selectedService != null &&
                 selectedTime.isNotEmpty() &&
-                selectedDate != "Selecione a data do agendamento") {
-                val agendamento = Agendamento(selectedService, selectedTime, selectedDate)
+                selectedDate != "Selecione a data do agendamento" &&
+                selectedBarber.isNotEmpty()) {
+
+                // Ajuste na criação do Agendamento para incluir o barbeiro
+                val agendamento = Agendamento(selectedService, selectedTime, selectedDate, selectedBarber)
                 AgendamentoManager.addAgendamento(agendamento)
 
                 Toast.makeText(
                     this,
-                    "Reserva confirmada: $selectedService em $selectedDate às $selectedTime",
+                    "Reserva confirmada: $selectedService com $selectedBarber em $selectedDate às $selectedTime",
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                Toast.makeText(this, "Por favor, selecione serviço, data e horário.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Por favor, selecione serviço, barbeiro, data e horário.", Toast.LENGTH_LONG).show()
             }
         }
     }

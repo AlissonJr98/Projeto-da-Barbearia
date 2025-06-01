@@ -2,4 +2,11 @@
     <string name="app_name">Barbearia</string>
     <string name="default_web_client_id">SEU_CLIENT_ID_AQUI</string>
     <string name="boas_vindas_nome">Bem-vindo, %1$s!</string>
+
+    <string-array name="barbeiros_array">
+        <item>TANJIRO KAMADO</item>
+        <item>ZENITSU AGATSUMA</item>
+        <item>TENGEN UZUI</item>
+        <item>KYOJURO RENGOKU</item>
+    </string-array>
 </resources>

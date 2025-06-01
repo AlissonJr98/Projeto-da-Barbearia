@@ -9,18 +9,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.projetos.barbearia.Activity.EscolhaServicoActivity
 import com.projetos.barbearia.R
-import com.projetos.barbearia.view.MeusAgendamentosActivity
-import com.projetos.barbearia.view.PerfilActivity
 import com.projetos.barbearia.adapter.BarberAdapter
 import com.projetos.barbearia.databinding.ActivityMainBinding
 import com.projetos.barbearia.viewmodel.MainViewModel
-import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.apply {
@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.statusBarBackground.layoutParams.height = getStatusBarHeight()
 
+        buscarNomeUsuario() // 🔹 Atualiza o nome do usuário
+
         binding.btnCard.setOnClickListener {
             startActivity(Intent(this, EscolhaServicoActivity::class.java))
         }
@@ -59,6 +61,12 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         observeViewModel()
+    }
+
+    private fun buscarNomeUsuario() {
+        val user = auth.currentUser
+        val nome = user?.displayName ?: "Usuário"
+        binding.textView2.text = "Bem-vindo $nome"
     }
 
     private fun getStatusBarHeight(): Int {
@@ -77,11 +85,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.barberItems.observe(this) { items ->
             binding.recyclerView.adapter = BarberAdapter(items) { clickedItem ->
                 val intent = Intent(this, EscolhaServicoActivity::class.java).apply {
-                    putExtra("BARBER_ITEM", clickedItem)  // Certifique-se que BarberItem é Parcelable ou Serializable
+                    putExtra("BARBER_ITEM", clickedItem)
                 }
                 startActivity(intent)
             }
         }
+
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> true

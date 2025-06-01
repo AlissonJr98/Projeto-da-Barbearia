@@ -1,67 +1,88 @@
-package com.projetos.barbearia.view // Pacote onde a classe está localizada
+package com.projetos.barbearia.view
 
-import android.content.Intent // Importa a classe Intent para navegar entre atividades <button class="citation-flag" data-index="1">
-import android.os.Bundle // Importa classes necessárias para gerenciar o ciclo de vida da atividade
-import android.widget.Toast // Importa a classe Toast para exibir mensagens curtas na tela <button class="citation-flag" data-index="6">
-import androidx.appcompat.app.AppCompatActivity // Importa a classe base para atividades compatíveis com a biblioteca de suporte
-import com.google.firebase.auth.FirebaseAuth // Importa a classe FirebaseAuth para autenticação com Firebase <button class="citation-flag" data-index="3">
-import com.projetos.barbearia.databinding.ActivitySignUpBinding // Importa o binding gerado automaticamente para acessar elementos do layout
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.projetos.barbearia.databinding.ActivitySignUpBinding
 
-// Classe que representa a tela de inscrição (sign-up) do aplicativo
 class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignUpBinding // Binding para acessar os elementos do layout
-    private lateinit var auth: FirebaseAuth // Instância do Firebase Authentication
+    private lateinit var binding: ActivitySignUpBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignUpBinding.inflate(layoutInflater) // Infla o layout usando View Binding
-        setContentView(binding.root) // Define o conteúdo da atividade como o layout inflado
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Configurar o botão "Voltar"
+        // Botão Voltar
         binding.btnVoltarSign.setOnClickListener {
-            finish() // Fecha a atividade atual e retorna à tela anterior
+            finish()
         }
 
+        // Botão "Já tem conta?"
         binding.jaTemContaTextView.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
-            finish() // Finaliza a SignUpActivity para não voltar com o botão voltar
+            finish()
         }
 
-        // Inicializar o Firebase Auth
-        auth = FirebaseAuth.getInstance() // Obtém a instância do Firebase Authentication <button class="citation-flag" data-index="3">
+        auth = FirebaseAuth.getInstance()
 
-        // Configurar o botão de inscrição
         binding.btnIncrever.setOnClickListener {
-            val email = binding.etEmail.text.toString() // Obtém o e-mail digitado pelo usuário
-            val password = binding.etSenha.text.toString() // Obtém a senha digitada pelo usuário
+            val nome = binding.etNome.text.toString().trim()
+            val email = binding.etEmail.text.toString().trim()
+            val senha = binding.etSenha.text.toString().trim()
+            val confirmaSenha = binding.etConfirmaSenha.text.toString().trim()
 
-            // Validar os campos
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show() // Exibe uma mensagem de erro caso algum campo esteja vazio <button class="citation-flag" data-index="6">
-                return@setOnClickListener // Encerra a execução do listener
+            // Validação básica
+            if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmaSenha.isEmpty()) {
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (senha != confirmaSenha) {
+                Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
             // Criar conta no Firebase
-            auth.createUserWithEmailAndPassword(email, password) // Tenta criar uma nova conta com o e-mail e senha fornecidos <button class="citation-flag" data-index="3">
+            auth.createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Autenticação bem-sucedida
-                        val user = auth.currentUser // Obtém o usuário atualmente autenticado
-                        Toast.makeText(
-                            this@SignUpActivity,
-                            "Cadastro realizado com sucesso! Bem-vindo: ${user?.email}",
-                            Toast.LENGTH_SHORT
-                        ).show() // Exibe uma mensagem de sucesso com o e-mail do usuário <button class="citation-flag" data-index="6">
-                        // Navegar para a MainActivity
-                        startActivity(Intent(this@SignUpActivity, MainActivity::class.java)) // Navega para a MainActivity <button class="citation-flag" data-index="1">
-                        finish() // Finaliza a atividade atual
+                        val user = auth.currentUser
+
+                        // Atualiza o nome do usuário
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(nome)
+                            .build()
+
+                        user?.updateProfile(profileUpdates)
+                            ?.addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    Toast.makeText(
+                                        this,
+                                        "Cadastro realizado com sucesso! Bem-vindo: ${user.displayName}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    startActivity(Intent(this, MainActivity::class.java))
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        "Erro ao salvar nome: ${updateTask.exception?.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
                     } else {
-                        // Autenticação falhou
                         Toast.makeText(
-                            this@SignUpActivity,
+                            this,
                             "Falha no cadastro: ${task.exception?.message}",
                             Toast.LENGTH_SHORT
-                        ).show() // Exibe uma mensagem de erro com detalhes <button class="citation-flag" data-index="6">
+                        ).show()
                     }
                 }
         }

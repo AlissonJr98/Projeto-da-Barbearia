@@ -26,6 +26,7 @@ class AgendamentoAdapter(private val agendamentos: List<Agendamento>) :
         holder.binding.servicoTextView.text = agendamento.servico
         holder.binding.dataTextView.text = agendamento.data
         holder.binding.horaTextView.text = agendamento.horario
+        holder.binding.barbeiroTextView.text = agendamento.barbeiro
     }
 
     override fun getItemCount() = agendamentos.size

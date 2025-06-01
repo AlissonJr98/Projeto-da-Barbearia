@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="8dp"
-                android:text="CLUBE DE CAVALHEIROS"
+                android:text="BARBEARIA INOSUKE"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -127,7 +127,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:gravity="center_horizontal"
-                android:text="Eleve o seu visual conosco! Endereço: Android Simples e Direto"
+                android:text="Eleve o seu visual conosco!"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -222,6 +222,26 @@
                 android:background="@drawable/bg_textview_box"
                 android:clickable="true"
                 android:focusable="true" />
+
+            <!-- Spinner para escolher o barbeiro -->
+            <TextView
+                android:id="@+id/barbeiroTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Escolha o barbeiro:"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/barbeiroSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_spinner_background"
+                android:popupBackground="#141414"
+                android:theme="@style/SpinnerTextStyle" />
 
             <!-- Spinner para escolher o horário -->
             <Spinner
