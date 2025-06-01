@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editServico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Serviço" />
+
+        <EditText
+            android:id="@+id/editData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data" />
+
+        <EditText
+            android:id="@+id/editHorario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Horário" />
+
+        <EditText
+            android:id="@+id/editBarbeiro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Barbeiro" />
+
+    </LinearLayout>
+</ScrollView>

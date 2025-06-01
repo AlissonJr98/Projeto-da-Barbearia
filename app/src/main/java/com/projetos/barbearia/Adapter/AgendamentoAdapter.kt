@@ -6,11 +6,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.projetos.barbearia.databinding.ItemAgendamentoBinding
 import com.projetos.barbearia.model.Agendamento
 
-class AgendamentoAdapter(private val agendamentos: List<Agendamento>) :
-    RecyclerView.Adapter<AgendamentoAdapter.AgendamentoViewHolder>() {
+class AgendamentoAdapter(
+    private val agendamentos: List<Agendamento>,
+    private val onEditarClick: (pos: Int) -> Unit,
+    private val onCancelarClick: (pos: Int) -> Unit
+) : RecyclerView.Adapter<AgendamentoAdapter.AgendamentoViewHolder>() {
 
     inner class AgendamentoViewHolder(val binding: ItemAgendamentoBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.btnEditar.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onEditarClick(position)
+                }
+            }
+            binding.btnCancelar.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onCancelarClick(position)
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AgendamentoViewHolder {
         val binding = ItemAgendamentoBinding.inflate(

@@ -28,8 +28,10 @@ class PerfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPerfilBinding
     private val firestore = FirebaseFirestore.getInstance()
-    private val user = FirebaseAuth.getInstance().currentUser
+    private val auth = FirebaseAuth.getInstance()
+    private val user get() = auth.currentUser
 
+    // Registro para pegar imagem da galeria
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { uploadImageToFirebase(it) }
     }
@@ -39,37 +41,57 @@ class PerfilActivity : AppCompatActivity() {
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Ajustar padding para barras do sistema
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        carregarFotoPerfil()
+        carregarDadosPerfil()
+        configurarListeners()
+        configurarRecyclerView()
+    }
+
+    private fun carregarDadosPerfil() {
+        // Carregar dados básicos
         binding.profileName.text = user?.displayName ?: "Nome não definido"
         binding.profileEmail.text = user?.email ?: "Email não definido"
+        carregarFotoPerfil()
         carregarDadosExtrasDoPerfil()
+    }
 
-        binding.profileImage.setOnClickListener { pickImageLauncher.launch("image/*") }
-
-        val agendamentos = AgendamentoManager.getAgendamentos()
-        binding.recyclerViewAgendamentos.layoutManager = LinearLayoutManager(this)
-        binding.recyclerViewAgendamentos.adapter = AgendamentoAdapter(agendamentos)
-
+    private fun configurarListeners() {
+        binding.profileImage.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
         binding.btnEditProfile.setOnClickListener { showEditNameDialog() }
         binding.btnEditEmail.setOnClickListener { showEditEmailDialog() }
         binding.profileAddress.setOnClickListener { showEditAddressDialog() }
         binding.profilePhone.setOnClickListener { showEditPhoneDialog() }
-
         binding.btnLogout.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
+            auth.signOut()
             Toast.makeText(this, "Logout realizado com sucesso", Toast.LENGTH_SHORT).show()
-
-            // Redireciona para a tela de login e limpa a pilha de activities
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+    }
+
+    private fun configurarRecyclerView() {
+        val agendamentos = AgendamentoManager.getAgendamentos()
+        binding.recyclerViewAgendamentos.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewAgendamentos.adapter = AgendamentoAdapter(
+            agendamentos,
+            onEditarClick = { pos ->
+                Toast.makeText(this, "Editar agendamento na posição $pos", Toast.LENGTH_SHORT).show()
+                // Aqui você pode abrir uma activity para edição ou mostrar um diálogo, etc.
+            },
+            onCancelarClick = { pos ->
+                Toast.makeText(this, "Cancelar agendamento na posição $pos", Toast.LENGTH_SHORT).show()
+                // Aqui você pode remover o agendamento ou mostrar confirmação, etc.
+            }
+        )
     }
 
     private fun carregarFotoPerfil() {
@@ -78,7 +100,7 @@ class PerfilActivity : AppCompatActivity() {
                 .load(it)
                 .placeholder(R.drawable.default_profile)
                 .into(binding.profileImage)
-        }
+        } ?: binding.profileImage.setImageResource(R.drawable.default_profile)
     }
 
     private fun carregarDadosExtrasDoPerfil() {
@@ -88,6 +110,9 @@ class PerfilActivity : AppCompatActivity() {
                     if (doc.exists()) {
                         binding.profileAddress.text = doc.getString("address") ?: "Endereço não definido"
                         binding.profilePhone.text = doc.getString("phone") ?: "Telefone não definido"
+                    } else {
+                        binding.profileAddress.text = "Endereço não definido"
+                        binding.profilePhone.text = "Telefone não definido"
                     }
                 }
                 .addOnFailureListener {
@@ -112,7 +137,10 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun uploadImageToFirebase(imageUri: Uri) {
-        val user = FirebaseAuth.getInstance().currentUser ?: return
+        val user = this.user ?: run {
+            Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val storageRef = FirebaseStorage.getInstance().reference
         val profileImagesRef = storageRef.child("profileImages/${user.uid}.jpg")
@@ -159,21 +187,26 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun atualizarNomeFirebase(novoNome: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.let {
-            val updates = userProfileChangeRequest { displayName = novoNome }
-            user.updateProfile(updates).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    binding.profileName.text = novoNome
-                    Toast.makeText(this, "Nome atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+        val user = this.user ?: run {
+            Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-                    // Atualiza no Firestore também
-                    firestore.collection("users").document(user.uid).update("name", novoNome)
-                } else {
-                    Toast.makeText(this, "Erro ao atualizar nome: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
+        val updates = userProfileChangeRequest { displayName = novoNome }
+        user.updateProfile(updates).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                binding.profileName.text = novoNome
+                Toast.makeText(this, "Nome atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+
+                firestore.collection("users").document(user.uid)
+                    .update("name", novoNome)
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Erro ao atualizar nome no Firestore: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Erro ao atualizar nome: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
-        } ?: Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showEditAddressDialog() {
@@ -260,8 +293,7 @@ class PerfilActivity : AppCompatActivity() {
     }
 
     private fun reauthenticateAndChangeEmail(novoEmail: String, senha: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
+        val user = this.user ?: run {
             Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -274,8 +306,11 @@ class PerfilActivity : AppCompatActivity() {
                         binding.profileEmail.text = novoEmail
                         Toast.makeText(this, "Email atualizado com sucesso!", Toast.LENGTH_SHORT).show()
 
-                        // Atualiza no Firestore também
-                        firestore.collection("users").document(user.uid).update("email", novoEmail)
+                        firestore.collection("users").document(user.uid)
+                            .update("email", novoEmail)
+                            .addOnFailureListener {
+                                Toast.makeText(this, "Erro ao atualizar email no Firestore: ${it.message}", Toast.LENGTH_SHORT).show()
+                            }
                     } else {
                         Toast.makeText(this, "Falha ao atualizar email: ${updateTask.exception?.message}", Toast.LENGTH_LONG).show()
                     }

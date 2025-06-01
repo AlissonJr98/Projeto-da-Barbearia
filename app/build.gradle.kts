@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -60,6 +62,7 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
     kapt("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("androidx.recyclerview:recyclerview:1.3.0")
 
     // Accompanist (opcional)
     implementation("com.google.accompanist:accompanist-insets:0.30.1")
